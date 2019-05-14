@@ -8,7 +8,7 @@ def hello():
 
 def generate_report(params,callback_url):
 
-   report_params = {'message': "Just testing here",
+   report_params = {'message': "Report will be built here",
                   'workspace_name': params.get('workspace_name')}
 
    kbase_report_client = KBaseReport(callback_url)
