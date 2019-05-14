@@ -20,6 +20,17 @@
             "text_options": {
                 "valid_ws_types": [ ]
             }
+        },
+        {
+            "id": "calculation_type",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text",
+            "text_options": {
+                "valid_ws_types": [ ]
+            }
         }
     ],
     "behavior": {
@@ -37,6 +48,9 @@
                 },{
                     "input_parameter": "smiles_string",
                     "target_property": "smiles_string"
+                },{
+                    "input_parameter": "calculation_type",
+                    "target_property": "calculation_type"
                 }
             ],
             "output_mapping": [

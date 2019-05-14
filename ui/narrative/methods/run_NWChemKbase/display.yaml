@@ -31,6 +31,13 @@ parameters :
             The SMILES string
         long-hint  : |
             The SMILES string that defines molecule
+    calculation_type :
+        ui-name : |
+            type of the calculation
+        short-hint : |
+            type of the calculation
+        long-hint  : |
+            specification of the calculation
 
 description : |
     <p>Calculate total energy of the molecule using NWChem computational chemistry package. </p>
