@@ -3,16 +3,16 @@
     "authors": [
         "marat"
     ],
-    "contact": "",
+    "contact": "marat.valiev@gmail.com",
     "categories": ["active"],
     "widgets": {
         "input": null,
-        "output": null
+        "output": "no-display"
     },
     "parameters": [ 
         {
-            "id": "parameter_1",
-            "optional": true,
+            "id": "smiles_string",
+            "optional": false,
             "advanced": false,
             "allow_multiple": false,
             "default_values": [ "" ],
@@ -35,8 +35,8 @@
                     "narrative_system_variable": "workspace_id",
                     "target_property": "workspace_id"
                 },{
-                    "input_parameter": "parameter_1",
-                    "target_property": "parameter_1"
+                    "input_parameter": "smiles_string",
+                    "target_property": "smiles_string"
                 }
             ],
             "output_mapping": [
