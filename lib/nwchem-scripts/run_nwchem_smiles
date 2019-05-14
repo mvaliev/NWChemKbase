@@ -1,0 +1,68 @@
+#!/bin/bash
+#source ~/bin/utils.sh
+echo $1
+#exit 0
+
+python smiles2pdb.py $1
+cat mol.pdb
+#python smiles2pdb.py [OH2]
+#default parameters
+template_dir=/simulation
+basis=6-31G
+theory=b3lyp
+mult=1
+charge=-1
+procs=2
+template=energy-0000.nwt
+prefix='.'
+
+parfile=./par.dat
+
+source ${parfile}
+s0='mol.pdb'
+
+nwfile=nwchem-0.nw
+
+
+template=${template_dir}/${template}
+
+s1=${s0##*/}
+s1p=${s1%*.*}
+rundir=${prefix}/$s1p
+#echo "running in "$rundir
+if [ ! -f $s0 ] 
+then
+  echo "cannot submit "$s1p", structure file "$s0" does not exist"
+  continue
+fi
+if [ -d $rundir ] 
+then
+  echo "cannot submit "$s1p", calculation already exists"
+  continue
+fi
+#echo "submitting " $s1
+mkdir -p $rundir
+cp ${parfile} $rundir
+cp ${s0} $rundir
+cd $rundir
+mkdir perm
+mkdir data
+cp -r $template ./${nwfile}
+obabel ${s1} -O${s1p}.xyz >> log 2>&1
+sed -i "s/xstructure/${s1p}.xyz/g" ./${nwfile}
+sed -i "s/xtheory/${theory}/g" ./${nwfile}
+sed -i "s/xmult/${mult}/g" ./${nwfile}
+sed -i "s/xcharge/${charge}/g" ./${nwfile}
+sed -i "s/xbasis/${basis}/g" ./${nwfile}
+sed -i "s/xnsteps/${nsteps}/g" ./${nwfile}
+sed -i "s/xnroots/${nroots}/g" ./${nwfile}
+sed -i "s/xtemp/${temp}/g" ./${nwfile}
+#create header
+datetime=$(date)
+sed -i "1s/^/#Created on ${datetime} by ${USER} \n\n/" ./${nwfile}
+#echo ${PWD}
+mpirun -np 2 --allow-run-as-root nwchem ${nwfile} > nwchem.out 2>error
+echo `grep 'Total DFT' nwchem.out` 
+cd $OLDPWD
+exit 0
+

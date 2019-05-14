@@ -1,0 +1,66 @@
+#!/bin/bash
+#source ~/bin/utils.sh
+echo $1
+echo ${NWCHEM_SIM_DIR}
+cd ${NWCHEM_SIM_DIR}
+rm -rf *
+echo "contents of ${NWCHEM_SIM_DIR}"
+ls ${NWCHEM_SIM_DIR}
+smiles2pdb $1
+cat mol.pdb
+
+#default parameters
+template_dir=${NWCHEM_TEMPLATES_DIR}
+basis=6-31G
+theory=b3lyp
+mult=1
+charge=-1
+procs=2
+template=energy-0000.nwt
+prefix='.'
+
+parfile=./par.dat
+
+source ${parfile}
+s0='mol.pdb'
+
+nwfile=nwchem-0.nw
+
+
+template=${template_dir}/${template}
+if [ ! -f $template ] 
+then
+  echo "cannot run, template file "$template" does not exist"
+  exit 1
+fi
+
+s1=${s0##*/}
+s1p=${s1%*.*}
+
+if [ ! -f $s0 ] 
+then
+  echo "cannot submit "$s1p", structure file "$s0" does not exist"
+  continue
+fi
+
+mkdir perm
+mkdir data
+cp -r $template ./${nwfile}
+obabel ${s1} -O${s1p}.xyz >> log 2>&1
+sed -i "s/xstructure/${s1p}.xyz/g" ./${nwfile}
+sed -i "s/xtheory/${theory}/g" ./${nwfile}
+sed -i "s/xmult/${mult}/g" ./${nwfile}
+sed -i "s/xcharge/${charge}/g" ./${nwfile}
+sed -i "s/xbasis/${basis}/g" ./${nwfile}
+sed -i "s/xnsteps/${nsteps}/g" ./${nwfile}
+sed -i "s/xnroots/${nroots}/g" ./${nwfile}
+sed -i "s/xtemp/${temp}/g" ./${nwfile}
+#create header
+datetime=$(date)
+sed -i "1s/^/#Created on ${datetime} by ${USER} \n\n/" ./${nwfile}
+#echo ${PWD}
+mpirun -np 2 --allow-run-as-root nwchem ${nwfile} > nwchem.out 2>error
+echo `grep 'Total DFT' nwchem.out` 
+cd $OLDPWD
+exit 0
+
