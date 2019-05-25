@@ -64,6 +64,8 @@ ENV     NWCHEM_BIN=${NWCHEM_TOP}/bin/LINUX64
 ENV     NWCHEM_TEMPLATES_DIR=${NWCHEM_DATA}/templates
 ENV     PATH="${NWCHEM_BIN}:$PATH"
 
+ENV     PATH=":/kb/module/lib/nwchem_utils:$PATH"
+
 COPY ./nwchem-scripts/smiles2pdb ${NWCHEM_BIN}/
 COPY ./nwchem-scripts/run_nwchem ${NWCHEM_BIN}/
 COPY ./nwchem-scripts/energy-0000.nwt ${NWCHEM_TEMPLATES_DIR}/

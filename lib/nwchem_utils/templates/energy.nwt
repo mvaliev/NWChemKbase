@@ -1,0 +1,36 @@
+echo
+#
+# Basic single point energy calculation
+#
+# Author: Marat Valiev
+#
+
+memory {{memory}}
+
+charge {{charge}}
+
+start mol
+
+permanent_dir ./perm
+scratch_dir ./data
+
+geometry {{geometry_flags}}
+{{geometry}}
+end
+
+basis
+{{basis}}
+end
+
+
+dft
+ mult {{mult}}
+ xc {{dft_xc}}
+ iterations {{dft_iterations}}
+%if mult != 1
+ print "alpha partner info"
+%endif
+end
+
+task dft energy
+

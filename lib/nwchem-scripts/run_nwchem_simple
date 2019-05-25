@@ -1,0 +1,17 @@
+#!/bin/bash
+#source ~/bin/utils.sh
+echo $1
+echo ${NWCHEM_SIM_DIR}
+cd ${NWCHEM_SIM_DIR}
+rm -rf *
+echo "contents of ${NWCHEM_SIM_DIR}"
+ls ${NWCHEM_SIM_DIR}
+
+mkdir perm
+mkdir data
+
+mpirun -np 2 --allow-run-as-root nwchem $1 > $2 2>error
+echo `grep 'Total DFT' $2`
+
+exit 0
+

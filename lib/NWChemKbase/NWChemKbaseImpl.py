@@ -10,7 +10,11 @@ from rdkit.Chem import Descriptors
 
 from installed_clients.KBaseReportClient import KBaseReport
 from nwchem_utils.nwchem_utils import hello, generate_report
+from nwchem_utils.nwchem_run import nwchem_run_smiles
+from nwchem_utils.nwchem_parser import parse_total_energy
+from nwchem_parser import generate_summary
 #END_HEADER
+
 
 
 class NWChemKbase:
@@ -64,34 +68,43 @@ class NWChemKbase:
 #        self._mkdir_p(result_directory)
 
         #s = _subprocess.call(["echo $NWCHEM_EXECUTABLE"])
-        s = _subprocess.call(["ls"])
-        print(s)
-        nwchem = os.environ['NWCHEM_EXECUTABLE']
-        run_nwchem = os.environ['NWCHEM_BIN']+"/run_nwchem"
-
-        print (run_nwchem)
-        nwchem_output = os.environ['NWCHEM_SIM_DIR']+"/nwchem.out"
-        s = _subprocess.call([run_nwchem,params['smiles_string']])
-        print("output file ",nwchem_output)
-        output = _subprocess.run(['cat',nwchem_output],stdout=_subprocess.PIPE)
-        energy = _subprocess.run(['grep','Total DFT',nwchem_output],stdout=_subprocess.PIPE)
-        energy = energy.stdout.decode('utf-8')
-        #print("nwchem output=",output.stdout.decode('utf-8'))
-        print("params=",params)
-        mol = Chem.MolFromSmiles(params['smiles_string'])
-        formula = Chem.rdMolDescriptors.CalcMolFormula(mol)
-        print("formula",formula)
-        text_message = "".join([
-           'NWChem single point energy calculation:\n',
-           'Molecular SMILE string:',
-           str(params['smiles_string']),
-           '\n',
-           'Molecular Formula: ',formula,
-           '\n', str(energy).strip(),'\n'
-        ])
+        #HERE
+        # s = _subprocess.call(["ls"],stdout=_subprocess.PIPE)
+        # print("ls=",s)
+        # s = _subprocess.call(["pwd"],stdout=_subprocess.PIPE)
+        # print("\n","pwd=",s)
+        # print("\n","params",params)
+        # nwchem = os.environ['NWCHEM_EXECUTABLE']
+        # run_nwchem = os.environ['NWCHEM_BIN']+"/run_nwchem"
+        #
+        # print ("\n",run_nwchem)
+        # nwchem_output = os.environ['NWCHEM_SIM_DIR']+"/nwchem.out"
+        # s = _subprocess.call([run_nwchem,params['smiles_string']])
+        # print("\n","output file ",nwchem_output)
+        # # nwchem_run_smiles('[OH2')
+        input, output = nwchem_run_smiles(params['smiles_string'])
+        text_message = generate_summary(output)
+        parse_total_energy(output)
+        # output = _subprocess.run(['cat',nwchem_output],stdout=_subprocess.PIPE)
+        # energy = _subprocess.run(['grep','Total DFT',nwchem_output],stdout=_subprocess.PIPE)
+        # energy = energy.stdout.decode('utf-8')
+        # #print("nwchem output=",output.stdout.decode('utf-8'))
+        # print("params=",params)
+        # mol = Chem.MolFromSmiles(params['smiles_string'])
+        # formula = Chem.rdMolDescriptors.CalcMolFormula(mol)
+        # print("charge",Chem.rdmolops.GetFormalCharge(mol))
+        # print("multiplicity",Chem.Descriptors.NumRadicalElectrons(mol))
+        # print("\n","formula",formula)
+        # text_message = "".join([
+        #    'NWChem single point energy calculation:\n',
+        #    'Molecular SMILE string:',
+        #    str(params['smiles_string']),
+        #    '\n',
+        #    'Molecular Formula: ',formula,
+        #    '\n', str(energy).strip(),'\n'
+        # ])
         print("\n------------------")
         print(text_message)
-        hello()
         print("------------------\n")
 
 

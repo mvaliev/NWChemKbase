@@ -1,0 +1,13 @@
+memory: "total 2000 Mb"
+
+mult: 1
+charge: 0
+
+
+geometry: "load mol.xyz"
+basis: "*  library 6-31G*"
+
+dft_iterations: 500
+dft_xc: 'b3lyp'
+
+task: 'energy'
