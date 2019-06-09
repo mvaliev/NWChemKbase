@@ -28,6 +28,9 @@ def get_atom_pos(mol,conf_id=0):
 def smiles_to_3Dmol(smiles):
 
     mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        print(f"failed creating molecule from smiles {smiles} \n")
+        raise ValueError
 
     mol = Chem.AddHs(mol)
 

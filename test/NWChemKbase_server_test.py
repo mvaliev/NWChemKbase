@@ -64,7 +64,7 @@ class NWChemKbaseTest(unittest.TestCase):
         # Check returned data with
         # self.assertEqual(ret[...], ...) or other unittest methods
         ret = self.serviceImpl.run_NWChemKbase(self.ctx, {'workspace_name': self.wsName,
-                                                             'smiles_string': '[OH]',
+                                                             'smiles_string': 'OH',
                                                           'calculation_type': 'energy'})
         print("Output")
         print (ret)
