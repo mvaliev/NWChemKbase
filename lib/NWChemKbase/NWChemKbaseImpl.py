@@ -9,7 +9,7 @@ from rdkit.Chem import AllChem
 from rdkit.Chem import Descriptors
 
 from installed_clients.KBaseReportClient import KBaseReport
-from nwchem_utils.nwchem_utils import hello, generate_report
+from nwchem_utils.nwchem_report import generate_report
 from nwchem_utils.nwchem_run import nwchem_run_smiles
 from nwchem_utils.nwchem_parser import parse_total_energy
 from nwchem_parser import generate_summary
