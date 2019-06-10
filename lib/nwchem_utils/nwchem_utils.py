@@ -17,8 +17,11 @@ def hello():
     print(os.listdir(template_folder))
 
 
-def generate_report(params, callback_url):
-    report_params = {'message': "Report will be built here",
+def generate_report(output_path, params, callback_url):
+
+    message = f"The output file is {output_path}"
+    # print(message)
+    report_params = {'message': message,
                      'workspace_name': params.get('workspace_name')}
 
     kbase_report_client = KBaseReport(callback_url)

@@ -48,7 +48,6 @@ class NWChemKbase:
         logging.basicConfig(format='%(created)s %(levelname)s: %(message)s',
                             level=logging.INFO)
         self.scratch = config['scratch']
-        print('IN INIT DIRECTORY')
         #END_CONSTRUCTOR
         pass
 
@@ -82,9 +81,9 @@ class NWChemKbase:
         # s = _subprocess.call([run_nwchem,params['smiles_string']])
         # print("\n","output file ",nwchem_output)
         # # nwchem_run_smiles('[OH2')
-        input, output = nwchem_run_smiles(params['smiles_string'])
-        text_message = generate_summary(output)
-        parse_total_energy(output)
+        input_path, output_path = nwchem_run_smiles(params['smiles_string'])
+        text_message = generate_summary(output_path)
+        parse_total_energy(output_path)
         # output = _subprocess.run(['cat',nwchem_output],stdout=_subprocess.PIPE)
         # energy = _subprocess.run(['grep','Total DFT',nwchem_output],stdout=_subprocess.PIPE)
         # energy = energy.stdout.decode('utf-8')
@@ -120,7 +119,7 @@ class NWChemKbase:
         # kbase_report_client = KBaseReport(self.callback_url)
         # report_info = kbase_report_client.create_extended_report(report_params)
 
-        report_info = generate_report(params,self.callback_url )
+        report_info = generate_report(output_path, params,self.callback_url )
 
         # STEP 6: contruct the output to send back
         output = {'report_name': report_info['name'],
