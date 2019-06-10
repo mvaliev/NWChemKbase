@@ -27,9 +27,26 @@
             "advanced": false,
             "allow_multiple": false,
             "default_values": [ "" ],
-            "field_type": "text",
-            "text_options": {
-                "valid_ws_types": [ ]
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                    {
+                        "display": "Direct Download Link",
+                        "value": "Direct Download"
+                    },
+                    {
+                        "display": "FTP Link",
+                        "value": "FTP"
+                    },
+                    {
+                        "display": "DropBox Public Shared Link",
+                        "value": "DropBox"
+                    },
+                    {
+                        "display": "Google Drive Public Shared Link",
+                        "value": "Google Drive"
+                    }
+                ]
             }
         }
     ],
