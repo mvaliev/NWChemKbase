@@ -74,15 +74,15 @@ def nwchem_run_smiles(smiles):
 
     completed = subprocess.run(['cat',output_path],
                                stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True)
-    print('completed:',completed)
-    print('returncode:', completed.returncode)
-    print('output file:', completed.stdout)
+    # print('completed:',completed)
+    # print('returncode:', completed.returncode)
+    # print('output file:', completed.stdout)
 
-    completed = subprocess.run(['cat',input_path],
-                               stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True)
-    print('completed:',completed)
-    print('returncode:', completed.returncode)
-    print('input file:', completed.stdout)
+    # completed = subprocess.run(['cat',input_path],
+    #                            stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True)
+    # print('completed:',completed)
+    # print('returncode:', completed.returncode)
+    # print('input file:', completed.stdout)
 
 
     # pattern = r'Total\s+\w+\s+[e,E]nergy\s+=\s+([-,+,\d,.]+)'

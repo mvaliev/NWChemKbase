@@ -73,7 +73,7 @@ def general_information(output_path):
 
 def parse_total_energy(output_path):
 
-    pattern = r'Total\s+\w+\s+[e,E]nergy\s+=\s+([-,+,\d,.]+)'
+    pattern = r'(Total\s+\w+\s+[e,E]nergy\s+=\s+[-,+,\d,.]+)'
 
     energy = []
     with open(output_path, 'r') as fp:
@@ -83,7 +83,21 @@ def parse_total_energy(output_path):
             if m:
                 energy.append(m.group(1))
 
-    print(energy)
+    return energy[-1]
+
+def parse_optimization(output_path):
+    pattern = "@(.+)"
+
+    with open(output_path, 'r') as fp:
+        buffer = fp.read()
+
+    # match = re.findall(pattern, buffer, re.MULTILINE | re.IGNORECASE)
+    match = re.findall(pattern, buffer, re.IGNORECASE)
+
+    steps = "\n".join(match)
+
+    return f'Summary of optimization steps\n{steps}'
+
 
 def parse_task(output_path):
     pattern = r'task\s+(?P<theory>\w+)\s+(?P<task>\w+)'
@@ -162,16 +176,19 @@ def extract_geometry(output_path,image=None):
 def generate_summary(output_file):
 
     header = get_chunk(output_file,pattern['header'],last_line=3,shift=True)
-
+    general = get_chunk(output_file, pattern['general'], shift=True)
     theory, task = parse_task(output_file)
+    energy = parse_total_energy(output_file)
+    optimization = parse_optimization(output_file)
+
     if 'opt' in task:
         calc_type = 'OPTIMIZATION CALCULATION'
+        output = f'\n{header}\n{calc_type}\n{general}\n{optimization}\n\n{energy}'
     if 'energy' in task:
         calc_type = 'ENERGY CALCULATION'
+        output = f'\n{header}\n{calc_type}\n{general}\n{energy}'
 
-    general = get_chunk(output_file,pattern['general'],shift=True)
-
-    return f'{header}\n{calc_type}\n{general}'
+    return output
 
 
 if __name__ == '__main__':
@@ -181,6 +198,8 @@ if __name__ == '__main__':
     from rdkit.Chem import Draw
     output = os.path.join(data_folder,'dft-optimization.out')
     print(generate_summary(output))
+    parse_total_energy(output)
+    parse_optimization(output)
     # # general_information(output)
     # print(get_chunk(output,pattern['header'],last_line=3,shift=True))
     #

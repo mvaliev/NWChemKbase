@@ -1,4 +1,5 @@
 import os
+import sys
 
 from nwchem_parser import generate_summary
 
@@ -23,7 +24,9 @@ def generate_report(output_path, params, callback_url):
 
     message = f"The output file is {output_path}"
     message = generate_summary(output_path)
-    # print(message)
+    print(message)
+
+    sys.stdout.flush()
     report_params = {'message': message,
                      'workspace_name': params.get('workspace_name')}
 
