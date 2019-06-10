@@ -1,5 +1,7 @@
 import os
 
+from nwchem_parser import generate_summary
+
 from installed_clients.KBaseReportClient import KBaseReport
 
 # from lib.installed_clients.KBaseReportClient import KBaseReport
@@ -20,6 +22,7 @@ def hello():
 def generate_report(output_path, params, callback_url):
 
     message = f"The output file is {output_path}"
+    message = generate_summary(output_path)
     # print(message)
     report_params = {'message': message,
                      'workspace_name': params.get('workspace_name')}
